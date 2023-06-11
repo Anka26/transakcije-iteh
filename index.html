@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <title>Racunovodja Anka</title>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="p-5 bg-green text-white rounded">
+        <h1 class="display-4">Dobrodosli!!!</h1>
+        <p id="dan" class="lead"></p>
+        <hr class="my-4">
+    </div>
+
+
+     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </symbol>
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </symbol>
+    </svg>
+
+    <div class="row">
+        <div class="col-12" id="poruke">
+
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <label for="firma">Odaberite firmu za prikaz</label>
+            <select id="firma" class="form-control">
+
+            </select>
+        </div>
+        <div class="col-12">
+            <hr>
+            <button onclick="ucitajPodatke()" class="btn btn-green">Ucitaj podatke za firmu</button>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-9">
+            <label for="min" >
+                Minimalna transakcija
+            </label>
+            <input type="number" value="0" class="form-control" id="min">
+            <label for="max" >
+                Maximalna transakcija
+            </label>
+            <input type="number" value="10000000000" class="form-control" id="max">
+            <hr>
+            <button class="btn btn-green" onclick="pretrazi()">Pretrazi</button>
+            <hr>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Firma</th>
+                        <th>Radnik</th>
+                        <th>Iznos</th>
+                        <th>Obrisi transakciju</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3">
+            <h3>Unesi novu transakciju</h3>
+            <label for="radnik">Radnik</label>
+            <select id="radnik" class="form-control">
+
+            </select>
+            <label for="iznos">
+                Iznos
+            </label>
+            <input type="number" id="iznos" class="form-control">
+            <hr>
+            <button class="btn btn-green" onclick="unesi()">Unesi transakciju</button>
+        </div>
+    </div>
+
+
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+            <span class="mb-3 mb-md-0 text-muted">© 2023 Anka racunovodja, Doo</span>
+        </div>
+
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+            <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+            <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+        </ul>
+    </footer>
+</div>
+
+
+<script src="js/bootstrap.js"></script>
+<script src="js/jquery.js"></script>
+<script>
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    let currentDate = `${day}-${month}-${year}`;
+    $("#dan").html("Danas je " + currentDate + " ,proverite transakcije!")
+</script>
+
+<script>
+    function ucitajSelectFirmi(){
+        $.ajax({
+            url: 'server.php',
+            data: {
+                operacija: 'VRATI-FIRME'
+            },
+            success: function (jsonPodaci){
+                console.log(jsonPodaci);
+                let podaci = JSON.parse(jsonPodaci);
+
+                let nalepi = '';
+
+                $.each(podaci, function (key, value){
+                    nalepi += '<option value="' + value.id + '">' + value.nazivFirme + '</option>';
+                });
+
+                $("#firma").html(nalepi);
+            }
+        });
+    }
+
+    ucitajSelectFirmi();
+
+    function vratiPorukuStanjeRacunaFirme(firmaId) {
+
+        $.ajax({
+            url: 'server.php',
+            data: {
+                operacija: 'VRATI-IZNOS',
+                firma: firmaId
+            },
+            success: function (jsonPodaci){
+                console.log(jsonPodaci);
+                let firma = JSON.parse(jsonPodaci);
+
+                let nalepi = '';
+
+                let poruka = '<div class="alert alert-primary d-flex align-items-center mt-1" role="alert">' +
+                    '  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>' +
+                    '  <div>' +
+                    '    Trenutno stanje racuna firme je: ' + firma.iznosNaRacunu + 'rsd' +
+                    '  </div>' +
+                    '</div>';
+
+                $("#poruke").html(poruka);
+
+            }
+        });
+    }
+
+    function ucitajPodatke(){
+        let firmaId = $("#firma").val();
+
+        ucitajTabelu(firmaId);
+
+        ucitajRadnike(firmaId);
+
+        vratiPorukuStanjeRacunaFirme(firmaId);
+    }
+
+    function ucitajTabelu(firmaId) {
+        $.ajax({
+            url: 'server.php',
+            data: {
+                operacija: 'VRATI-PODATKE',
+                min: $("#min").val(),
+                max: $("#max").val(),
+                firma: firmaId
+            },
+            success: function (jsonPodaci){
+                console.log(jsonPodaci);
+                let podaci = JSON.parse(jsonPodaci);
+
+
+                let nalepi = '';
+
+                $.each(podaci, function (key, value){
+
+                    nalepi += '<tr>';
+                    nalepi += '<td>' + value.radnik.firma.nazivFirme + '</td>';
+                    nalepi += '<td>' + value.radnik.imePrezime + '</td>';
+                    nalepi += '<td>' + value.iznos + ' rsd</td>';
+                    nalepi += '<td>' + '<button class="btn btn-danger" onclick="obrisi(' + value.id + ',' + value.radnik.firma.id + ')" >Obrisi </button> </td>';
+
+                    nalepi += '</tr>';
+                });
+
+                $("#tabela").html(nalepi);
+
+            }
+        });
+    }
+
+
+    function ucitajRadnike(firmaId){
+        $.ajax({
+            url: 'server.php',
+            data: {
+                operacija: 'VRATI-RADNIKE',
+                firma: firmaId
+            },
+            success: function (jsonPodaci){
+                let podaci = JSON.parse(jsonPodaci);
+
+                let nalepi = '';
+
+                $.each(podaci, function (key, value){
+                    nalepi += '<option value="' + value.id + '">' + value.imePrezime + '</option>';
+                });
+
+                $("#radnik").html(nalepi);
+            }
+        });
+    }
+
+    function pretrazi(){
+        let firmaId = $("#firma").val();
+
+        ucitajTabelu(firmaId);
+    }
+
+    function unesi(){
+        $.ajax({
+            url: 'server.php',
+            method: "post",
+            data: {
+                operacija: 'UNESI',
+                firma: $("#firma").val(),
+                radnik: $("#radnik").val(),
+                iznos: $("#iznos").val()
+            },
+            success: function (jsonPodaci){
+                let odgovorServera = JSON.parse(jsonPodaci);
+
+                if(true === odgovorServera.uspesno){
+                    let poruka = '<div class="alert alert-success d-flex align-items-center mt-1" role="alert">' +
+                        '  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#check-circle-fill"/></svg>' +
+                        '  <div>' +
+                        odgovorServera.poruka +
+                        '  </div>' +
+                        '</div>';
+
+                    $("#poruke").html(poruka);
+                    pretrazi();
+                }else{
+                    let poruka = '<div class="alert alert-danger d-flex align-items-center mt-1" role="alert">' +
+                        '  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#exclamation-triangle-fill"/></svg>' +
+                        '  <div>' +
+                        odgovorServera.poruka +
+                        '  </div>' +
+                        '</div>';
+
+                    $("#poruke").html(poruka);
+                }
+
+            }
+        });
+    }
+
+    function obrisi(transakcijaId, firmaId){
+        $.ajax({
+            url: 'server.php',
+            method: "post",
+            data: {
+                operacija: 'OBRISI',
+                firma: firmaId,
+                transakcija: transakcijaId,
+            },
+            success: function (jsonPodaci){
+                let odgovorServera = JSON.parse(jsonPodaci);
+
+                if(true === odgovorServera.uspesno){
+                    let poruka = '<div class="alert alert-success d-flex align-items-center mt-1" role="alert">' +
+                        '  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#check-circle-fill"/></svg>' +
+                        '  <div>' +
+                        odgovorServera.poruka +
+                        '  </div>' +
+                        '</div>';
+
+                    $("#poruke").html(poruka);
+                    pretrazi();
+                }else{
+                    let poruka = '<div class="alert alert-danger d-flex align-items-center mt-1" role="alert">' +
+                        '  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#exclamation-triangle-fill"/></svg>' +
+                        '  <div>' +
+                        odgovorServera.poruka +
+                        '  </div>' +
+                        '</div>';
+
+                    $("#poruke").html(poruka);
+                }
+
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>
